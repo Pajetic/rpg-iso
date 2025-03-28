@@ -27,9 +27,8 @@ namespace RPGIso.Control {
             
             if (Physics.Raycast(GetMouseRay(), out RaycastHit hit)) {
                 if (Input.GetMouseButton(0)) {
-                    movementController.MoveTo(hit.point);
+                    movementController.StartMoveAction(hit.point);
                 }
-
                 return true;
             }
             return false;
