@@ -6,10 +6,13 @@ namespace RPGIso.Combat {
     public class CombatController : MonoBehaviour, IAction {
         // TODO use actual weapon data
         [SerializeField] private float weaponRange = 2f;
+        [SerializeField] private float attackInterval = 2f;
+        [SerializeField] private float damage = 10f;
 
         private CombatTarget target;
         private MovementController movementController;
         private Animator animator;
+        private float timeSinceLastAttack = 0;
 
         private void Start() {
             movementController = GetComponent<MovementController>();
@@ -17,6 +20,7 @@ namespace RPGIso.Combat {
         }
 
         private void Update() {
+            timeSinceLastAttack += Time.deltaTime;
             if (target == null) {
                 return;
             }
@@ -31,7 +35,10 @@ namespace RPGIso.Combat {
         }
 
         private void AttackAction() {
-            animator.SetTrigger("attack");
+            if (timeSinceLastAttack > attackInterval) {
+                animator.SetTrigger("attack");
+                timeSinceLastAttack = 0;
+            }
         }
 
         public void Attack(CombatTarget target) {
@@ -49,7 +56,7 @@ namespace RPGIso.Combat {
 
         // Animation event
         private void Hit() {
-            
+            target.GetComponent<Health>().TakeDamage(damage);
         }
     }
 }
