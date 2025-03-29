@@ -47,6 +47,7 @@ namespace RPGIso.Combat {
         }
 
         public void CancelAction() {
+            animator.SetTrigger("stopAttack");
             target = null;
         }
 
