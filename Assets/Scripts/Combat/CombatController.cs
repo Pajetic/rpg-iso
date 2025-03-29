@@ -21,7 +21,7 @@ namespace RPGIso.Combat {
 
         private void Update() {
             timeSinceLastAttack += Time.deltaTime;
-            if (target == null) {
+            if (target == null || !target.GetComponent<Health>().isAlive) {
                 return;
             }
             
