@@ -9,7 +9,7 @@ namespace RPGIso.Combat {
         [SerializeField] private float attackInterval = 2f;
         [SerializeField] private float damage = 10f;
 
-        private CombatTarget target;
+        private GameObject target;
         private MovementController movementController;
         private Animator animator;
         private float timeSinceLastAttack = 0;
@@ -27,8 +27,7 @@ namespace RPGIso.Combat {
             
             if (!IsInRange()) {
                 movementController.MoveTo(target.transform.position);
-            }
-            else {
+            } else {
                 movementController.CancelAction();
                 AttackAction();
             }
@@ -43,14 +42,14 @@ namespace RPGIso.Combat {
             }
         }
 
-        public bool CanAttack(CombatTarget target) {
+        public bool CanAttack(GameObject target) {
             if (target == null || target.GetComponent<Health>() == null) {
                 return false;
             }
             return target.GetComponent<Health>().isAlive;
         }
 
-        public void Attack(CombatTarget target) {
+        public void Attack(GameObject target) {
             GetComponent<ActionScheduler>().StartAction(this);
             this.target = target;
         }
