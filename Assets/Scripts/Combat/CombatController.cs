@@ -35,6 +35,7 @@ namespace RPGIso.Combat {
         }
 
         private void AttackAction() {
+            transform.LookAt(target.transform);
             if (timeSinceLastAttack > attackInterval) {
                 animator.SetTrigger("attack");
                 timeSinceLastAttack = 0;
