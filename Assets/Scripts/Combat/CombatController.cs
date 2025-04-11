@@ -37,9 +37,17 @@ namespace RPGIso.Combat {
         private void AttackAction() {
             transform.LookAt(target.transform);
             if (timeSinceLastAttack > attackInterval) {
+                animator.ResetTrigger("stopAttack");
                 animator.SetTrigger("attack");
                 timeSinceLastAttack = 0;
             }
+        }
+
+        public bool CanAttack(CombatTarget target) {
+            if (target == null || target.GetComponent<Health>() == null) {
+                return false;
+            }
+            return target.GetComponent<Health>().isAlive;
         }
 
         public void Attack(CombatTarget target) {
@@ -48,6 +56,7 @@ namespace RPGIso.Combat {
         }
 
         public void CancelAction() {
+            animator.ResetTrigger("attack");
             animator.SetTrigger("stopAttack");
             target = null;
         }
@@ -58,6 +67,9 @@ namespace RPGIso.Combat {
 
         // Animation event
         private void Hit() {
+            if (target == null) {
+                return;
+            }
             target.GetComponent<Health>().TakeDamage(damage);
         }
     }

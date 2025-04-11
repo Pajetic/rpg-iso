@@ -6,10 +6,12 @@ namespace RPGIso.Control {
     class PlayerController : MonoBehaviour {
 
         MovementController movementController;
+        CombatController combatController;
         private Ray lastRay;
 
         private void Start() {
             movementController = GetComponent<MovementController>();
+            combatController = GetComponent<CombatController>();
         }
 
         private void Update() {
@@ -38,11 +40,10 @@ namespace RPGIso.Control {
             RaycastHit[] hits = Physics.RaycastAll(GetMouseRay());
             foreach (RaycastHit hit in hits) {
                 CombatTarget target = hit.transform.GetComponent<CombatTarget>();
-                if (target != null) {
+                if (combatController.CanAttack(target)) {
                     if (Input.GetMouseButtonDown(0)) {
-                        GetComponent<CombatController>().Attack(target);
+                        combatController.Attack(target);
                     }
-
                     return true;
                 }
             }
