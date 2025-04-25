@@ -48,7 +48,7 @@ namespace RPGIso.Control {
             foreach (RaycastHit hit in hits) {
                 GameObject target = hit.transform.gameObject;
                 if (target.GetComponent<CombatTarget>() != null && combatController.CanAttack(target)) {
-                    if (Input.GetMouseButtonDown(0)) {
+                    if (Input.GetMouseButton(0)) {
                         combatController.Attack(target);
                     }
                     return true;
