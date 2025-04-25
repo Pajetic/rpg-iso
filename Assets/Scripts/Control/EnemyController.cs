@@ -8,6 +8,7 @@ namespace RPGIso.Control {
         [SerializeField] private float targetDetectionDistance = 3f;
         [SerializeField] private float targetInvestigationTime = 3f;
         
+        
         private CombatController combatController;
         private Health health;
         private MovementController movementController;
@@ -15,9 +16,15 @@ namespace RPGIso.Control {
         private GameObject player;
 
         // TODO split out enemy behavior types
+        // Guard
         private Vector3 guardPosition;
         private float timeSinceLastTarget = float.MaxValue;
-
+        
+        // Patrol
+        [SerializeField] private PatrolPath patrolPath;
+        [SerializeField] private float patrolPointTolerance = 0.05f;
+        private int currentPatrolPointIndex = 0;
+        
         private void Start() {
             combatController = GetComponent<CombatController>();
             health = GetComponent<Health>();
@@ -38,6 +45,8 @@ namespace RPGIso.Control {
                 HandleAttack();
             } else if (timeSinceLastTarget < targetInvestigationTime) {
                 HandleInvestigateTarget();
+            } else if (patrolPath != null) {
+                HandlePatrol();
             } else {
                 HandleReturnToGuardPosition();
             }
@@ -56,6 +65,14 @@ namespace RPGIso.Control {
         private void HandleReturnToGuardPosition() {
             combatController.CancelAction();
             movementController.MoveTo(guardPosition);
+        }
+
+        private void HandlePatrol() {
+            if (Vector3.Distance(transform.position, patrolPath.GetPatrolPosition(currentPatrolPointIndex)) <
+                patrolPointTolerance) {
+                currentPatrolPointIndex = patrolPath.GetNextPatrolPointIndex(currentPatrolPointIndex);
+            }
+            movementController.MoveTo(patrolPath.GetPatrolPosition(currentPatrolPointIndex));
         }
 
         private bool IsPlayerInRange() {
