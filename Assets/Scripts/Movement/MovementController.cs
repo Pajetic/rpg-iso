@@ -9,15 +9,16 @@ namespace RPGIso.Movement {
     
         private NavMeshAgent navMeshAgent;
         private Animator animator;
-        private CombatController combatController;
+        private Health health;
     
         private void Start() {
             navMeshAgent = GetComponent<NavMeshAgent>();
             animator = GetComponent<Animator>();
-            combatController = GetComponent<CombatController>();
+            health = gameObject.GetComponent<Health>();
         }
 
         private void Update() {
+            navMeshAgent.enabled = health.isAlive;
             UpdateAnimator();
         }
 
