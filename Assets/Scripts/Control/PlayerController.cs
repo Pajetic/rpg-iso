@@ -1,20 +1,27 @@
 using UnityEngine;
 using RPGIso.Movement;
 using RPGIso.Combat;
+using RPGIso.Core;
 
 namespace RPGIso.Control {
     class PlayerController : MonoBehaviour {
 
-        MovementController movementController;
-        CombatController combatController;
+        private MovementController movementController;
+        private CombatController combatController;
+        private Health health;
         private Ray lastRay;
 
         private void Start() {
             movementController = GetComponent<MovementController>();
             combatController = GetComponent<CombatController>();
+            health = GetComponent<Health>();
         }
 
         private void Update() {
+            if (!health.isAlive) {
+                return;
+            }
+            
             if (HandleCombat()) {
                 return;
             }

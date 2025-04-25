@@ -1,7 +1,6 @@
-using System;
 using UnityEngine;
 
-namespace RPGIso.Combat {
+namespace RPGIso.Core {
     public class Health : MonoBehaviour {
         [SerializeField] private float health = 50f;
         
@@ -21,8 +20,9 @@ namespace RPGIso.Combat {
 
         private void HandleDeath() {
             if (isAlive) {
-                GetComponent<Animator>().SetTrigger("die");
                 isAlive = false;
+                GetComponent<Animator>().SetTrigger("die");
+                GetComponent<ActionScheduler>().CancelCurrentAction();
             }
         }
     }

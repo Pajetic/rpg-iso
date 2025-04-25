@@ -12,7 +12,7 @@ namespace RPGIso.Combat {
         private GameObject target;
         private MovementController movementController;
         private Animator animator;
-        private float timeSinceLastAttack = 0;
+        private float timeSinceLastAttack = float.MaxValue;
 
         private void Start() {
             movementController = GetComponent<MovementController>();
