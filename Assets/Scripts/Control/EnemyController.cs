@@ -23,7 +23,9 @@ namespace RPGIso.Control {
         // Patrol
         [SerializeField] private PatrolPath patrolPath;
         [SerializeField] private float patrolPointTolerance = 0.05f;
+        [SerializeField] private float patrolPointWaitTime = 3f;
         private int currentPatrolPointIndex = 0;
+        private float timeSincePatrolPointArrival = float.MaxValue;
         
         private void Start() {
             combatController = GetComponent<CombatController>();
@@ -71,8 +73,12 @@ namespace RPGIso.Control {
             if (Vector3.Distance(transform.position, patrolPath.GetPatrolPosition(currentPatrolPointIndex)) <
                 patrolPointTolerance) {
                 currentPatrolPointIndex = patrolPath.GetNextPatrolPointIndex(currentPatrolPointIndex);
+                timeSincePatrolPointArrival = 0;
             }
-            movementController.MoveTo(patrolPath.GetPatrolPosition(currentPatrolPointIndex));
+            timeSincePatrolPointArrival += Time.deltaTime;
+            if (timeSincePatrolPointArrival > patrolPointWaitTime) {
+                movementController.MoveTo(patrolPath.GetPatrolPosition(currentPatrolPointIndex));
+            }
         }
 
         private bool IsPlayerInRange() {
